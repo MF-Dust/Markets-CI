@@ -6,6 +6,7 @@ import ca.tweetzy.flight.utils.QuickItem;
 import ca.tweetzy.markets.Markets;
 import ca.tweetzy.markets.api.market.core.Market;
 import ca.tweetzy.markets.gui.MarketsBaseGUI;
+import ca.tweetzy.markets.gui.shared.selector.ConfirmGUI;
 import ca.tweetzy.markets.gui.shared.view.AllMarketsViewGUI;
 import ca.tweetzy.markets.gui.shared.view.requests.RequestsGUI;
 import ca.tweetzy.markets.gui.user.BankGUI;
@@ -56,10 +57,24 @@ public final class MarketsMainGUI extends MarketsBaseGUI {
 							return;
 						}
 
-						Markets.getMarketManager().create(this.player, created -> {
-							if (created)
-								click.manager.showGUI(click.player, new MarketsMainGUI(click.player));
-						});
+						if (Settings.USE_ADDITIONAL_CONFIRMS.getBoolean()) {
+							click.manager.showGUI(click.player, new ConfirmGUI(this, click.player, confirmed -> {
+								if (confirmed)
+									Markets.getMarketManager().create(this.player, created -> {
+										if (created)
+											click.manager.showGUI(click.player, new MarketsMainGUI(click.player));
+									});
+								else
+									click.manager.showGUI(click.player, new MarketsMainGUI(click.player));
+							}));
+
+						} else {
+							Markets.getMarketManager().create(this.player, created -> {
+								if (created)
+									click.manager.showGUI(click.player, new MarketsMainGUI(click.player));
+							});
+						}
+
 						return;
 					}
 
@@ -74,7 +89,7 @@ public final class MarketsMainGUI extends MarketsBaseGUI {
 						.hideTags(true)
 						.name(TranslationManager.string(this.player, Translations.GUI_MAIN_VIEW_ITEMS_REQUESTS_NAME))
 						.lore(TranslationManager.list(this.player, Translations.GUI_MAIN_VIEW_ITEMS_REQUESTS_LORE, "left_click", TranslationManager.string(this.player, Translations.MOUSE_LEFT_CLICK)))
-						.make(), click -> click.manager.showGUI(click.player, new RequestsGUI(new MarketsMainGUI(click.player), click.player, true)));
+						.make(), click -> click.manager.showGUI(click.player, new RequestsGUI(new MarketsMainGUI(click.player), click.player, Settings.REQUEST_MENU_SHOWS_OWN_FIRST.getBoolean())));
 
 		// payments
 		setButton(Settings.GUI_MAIN_VIEW_ITEMS_PAYMENTS_SLOT.getInt(),

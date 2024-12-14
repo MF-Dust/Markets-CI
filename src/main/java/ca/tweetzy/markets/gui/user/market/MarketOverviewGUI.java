@@ -13,6 +13,8 @@ import ca.tweetzy.markets.api.market.core.Market;
 import ca.tweetzy.markets.api.market.core.MarketItem;
 import ca.tweetzy.markets.gui.MarketsPagedGUI;
 import ca.tweetzy.markets.gui.shared.MarketsMainGUI;
+import ca.tweetzy.markets.gui.shared.selector.ConfirmGUI;
+import ca.tweetzy.markets.gui.shared.view.content.MarketViewGUI;
 import ca.tweetzy.markets.gui.shared.view.ratings.MarketRatingsViewGUI;
 import ca.tweetzy.markets.gui.user.category.MarketCategoryEditGUI;
 import ca.tweetzy.markets.settings.Settings;
@@ -43,7 +45,14 @@ public final class MarketOverviewGUI extends MarketsPagedGUI<Category> {
 	@Override
 	protected void drawFixed() {
 
-		// name
+		// view as buyer
+		setButton(getRows() - 1, 2, QuickItem
+						.of(Settings.GUI_MARKET_OVERVIEW_ITEMS_CUSTOMER_VIEW_ITEM.getItemStack())
+						.name(TranslationManager.string(this.player, Translations.GUI_MARKET_OVERVIEW_ITEMS_CUSTOMER_VIEW_NAME))
+						.lore(TranslationManager.list(Translations.GUI_MARKET_OVERVIEW_ITEMS_CUSTOMER_VIEW_LORE))
+						.make(), click -> click.manager.showGUI(click.player, new MarketViewGUI(this, click.player, this.market, true)));
+
+				// name
 		setButton(1, 1, QuickItem
 				.of(Settings.GUI_MARKET_OVERVIEW_ITEMS_DPN_ITEM.getItemStack())
 				.name(TranslationManager.string(this.player, Translations.GUI_MARKET_OVERVIEW_ITEMS_DPN_NAME))
@@ -156,34 +165,72 @@ public final class MarketOverviewGUI extends MarketsPagedGUI<Category> {
 				.lore(TranslationManager.list(Translations.GUI_MARKET_OVERVIEW_ITEMS_DELETE_LORE))
 				.make(), click -> {
 
+			if (Settings.USE_ADDITIONAL_CONFIRMS.getBoolean()) {
 
-			// skip category check if there is none
-			if (this.market.getCategories().isEmpty()) {
-				// just delete since no categories
-				yeetMarket(click);
-				return;
-			}
-
-			// loop through categories with items
-			market.getCategories().forEach(category -> {
-				category.getItems().forEach(item -> item.getViewingPlayers().clear());
-
-				Markets.getDataManager().deleteMarketItems(category, (error, itemResult) -> {
-					if (error == null && itemResult) {
-						category.getItems().forEach(item -> {
-							giveBackMarketItem(item);
-							Markets.getCategoryItemManager().remove(item);
-						});
+				click.manager.showGUI(click.player, new ConfirmGUI(this, click.player, confirmed -> {
+					if (!confirmed) {
+						click.manager.showGUI(click.player, new MarketOverviewGUI(click.player, this.market));
+						return;
 					}
+
+					// skip category check if there is none
+					if (this.market.getCategories().isEmpty()) {
+						// just delete since no categories
+						yeetMarket(click);
+						return;
+					}
+
+					// loop through categories with items
+					market.getCategories().forEach(category -> {
+						category.getItems().forEach(item -> item.getViewingPlayers().clear());
+
+						Markets.getDataManager().deleteMarketItems(category, (error, itemResult) -> {
+							if (error == null && itemResult) {
+								category.getItems().forEach(item -> {
+									giveBackMarketItem(item);
+									Markets.getCategoryItemManager().remove(item);
+								});
+							}
+						});
+					});
+
+					// kill categories
+					market.getCategories().forEach(category -> category.unStore(categoryRemoveResult -> {
+					}));
+
+					// remove market
+					yeetMarket(click);
+				}));
+
+			} else {
+				// skip category check if there is none
+				if (this.market.getCategories().isEmpty()) {
+					// just delete since no categories
+					yeetMarket(click);
+					return;
+				}
+
+				// loop through categories with items
+				market.getCategories().forEach(category -> {
+					category.getItems().forEach(item -> item.getViewingPlayers().clear());
+
+					Markets.getDataManager().deleteMarketItems(category, (error, itemResult) -> {
+						if (error == null && itemResult) {
+							category.getItems().forEach(item -> {
+								giveBackMarketItem(item);
+								Markets.getCategoryItemManager().remove(item);
+							});
+						}
+					});
 				});
-			});
 
-			// kill categories
-			market.getCategories().forEach(category -> category.unStore(categoryRemoveResult -> {
-			}));
+				// kill categories
+				market.getCategories().forEach(category -> category.unStore(categoryRemoveResult -> {
+				}));
 
-			// remove market
-			yeetMarket(click);
+				// remove market
+				yeetMarket(click);
+			}
 		});
 	}
 

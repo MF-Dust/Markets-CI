@@ -45,6 +45,7 @@ public final class Translations extends TranslationManager {
 	public static TranslationEntry REVIEWS_DISABLED = create("error.ratings disabled", "&cReviews are disabled");
 	public static TranslationEntry OFFERS_DISABLED = create("error.offers disabled", "&cOffers are disabled");
 	public static TranslationEntry NO_REVIEWS = create("error.no reviews", "&cThere are no reviews currently.");
+	public static TranslationEntry IN_CUSTOMER_MODE = create("error.not available in customer mode", "&cYou cannot do that in customer preview mode.");
 
 	public static TranslationEntry DELETED_MARKET = create("info.deleted market", "&eSuccessfully deleted your market!");
 	public static TranslationEntry REMOVED_PLAYER_MARKET = create("info.admin.removed market", "&eSuccessfully removed market owned by &b%player_name%");
@@ -71,6 +72,7 @@ public final class Translations extends TranslationManager {
 	public static TranslationEntry OFFER_ACCEPTED_PAYMENT = create("info.offer.accepted payment", "&eThe offer request was accepted");
 	public static TranslationEntry REQUEST_PAYMENT = create("info.request.payment", "&eA request was completed");
 	public static TranslationEntry REQUEST_FULFILLED = create("info.request.fulfilled", "&b%fulfill_name% &efulfilled your request for &e%request_item_name%");
+	public static TranslationEntry REQUEST_FULFILLED_FILLER = create("info.request.filler fulfilled", "&aSuccessfully fulfilled &b%fulfill_name%&a's request for &e%request_item_name%");
 
 
 	public static TranslationEntry DEFAULTS_MARKET_DISPLAY_NAME = create("info.defaults.market name", "&e%player_name%'s Market");
@@ -203,6 +205,15 @@ public final class Translations extends TranslationManager {
 			"&7Current&f: %market_display_name%",
 			"",
 			"&a&lClick &7to change display name"
+	);
+
+	public static TranslationEntry GUI_MARKET_OVERVIEW_ITEMS_CUSTOMER_VIEW_NAME = create("gui.market overview.items.customer view.name", "<GRADIENT:65B1B4>&LView as Customer</GRADIENT:2B6F8A>");
+	public static TranslationEntry GUI_MARKET_OVERVIEW_ITEMS_CUSTOMER_VIEW_LORE = create("gui.market overview.items.customer view.lore",
+			"&7If you would like to see how",
+			"&7your market will look like for buyers",
+			"&7you can click this button.",
+			"",
+			"&a&lClick &7to view as customer"
 	);
 
 	public static TranslationEntry GUI_MARKET_OVERVIEW_ITEMS_DESC_NAME = create("gui.market overview.items.description.name", "<GRADIENT:65B1B4>&LMarket Description</GRADIENT:2B6F8A>");
@@ -380,6 +391,12 @@ public final class Translations extends TranslationManager {
 	);
 
 	public static TranslationEntry GUI_USER_PICKER_TITLE = create("gui.user picker.title", "&eMarkets &f- &7Pick a user");
+	public static TranslationEntry GUI_CONFIRM_ACTION_TITLE = create("gui.confirm action.title", "&eMarkets &f- &7Are you sure?");
+	public static TranslationEntry GUI_CONFIRM_ACTION_ITEMS_YES_NAME = create("gui.confirm action.items.confirm.name", "<GRADIENT:4ab310>&lConfirm</GRADIENT:7ed664>");
+	public static TranslationEntry GUI_CONFIRM_ACTION_ITEMS_YES_LORE = create("gui.confirm action.items.confirm.lore", "&e&lClick &7to confirm action");
+
+	public static TranslationEntry GUI_CONFIRM_ACTION_ITEMS_NO_NAME = create("gui.confirm action.items.cancel.name", "<GRADIENT:9c0505>&lCancel</GRADIENT:c26a6a>");
+	public static TranslationEntry GUI_CONFIRM_ACTION_ITEMS_NO_LORE = create("gui.confirm action.items.cancel.lore", "&e&lClick &7to confirm action");
 
 
 	public static TranslationEntry GUI_CURRENCY_PICKER_TITLE = create("gui.currency picker.title", "&eMarkets &f- &7Pick a currency");
@@ -391,6 +408,13 @@ public final class Translations extends TranslationManager {
 			"&b&l%right_click% &7to open a material picker &eor",
 			"&e&l%left_click% &7with the item you want to use",
 			"&7as the currency onto this icon."
+	);
+
+	public static TranslationEntry GUI_CURRENCY_PICKER_ITEMS_CURRENCY_NAME = create("gui.currency picker.items.currency.name", "<GRADIENT:65B1B4>&l%currency_name%</GRADIENT:2B6F8A>");
+	public static TranslationEntry GUI_CURRENCY_PICKER_ITEMS_CURRENCY_LORE = create("gui.currency picker.items.currency.lore",
+			"&7Owning Plugin&f: &e%currency_owning_plugin%",
+			"",
+			"&a&l%left_click% &7to select this currency"
 	);
 
 	public static TranslationEntry GUI_MARKET_SETTINGS_TITLE = create("gui.market settings.title", "&eMarkets &f- &7Settings");
@@ -762,6 +786,14 @@ public final class Translations extends TranslationManager {
 			"&7Buyer&f: &e%buyer_name%",
 			"&7Date&f: &e%transaction_date%",
 			""
+	);
+
+	public static TranslationEntry GUI_BANK_TAX_TITLE = create("gui.tax bank.title", "&eMarkets &f- &7Tax Collection");
+	public static TranslationEntry GUI_BANK_TAX_ITEMS_ENTRY_NAME = create("gui.tax bank.items.entry.name","&a%entry_name%");
+	public static TranslationEntry GUI_BANK_TAX_ITEMS_ENTRY_LORE = create("gui.tax bank.items.entry.lore",
+			"&7Value&f: &E%entry_quantity%",
+			"",
+			"&e&l%left_click% &7to withdraw tax"
 	);
 
 	public static TranslationEntry GUI_BANK_TITLE = create("gui.bank.title", "&eMarkets &f- &7Bank");
